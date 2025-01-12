@@ -1,0 +1,23 @@
+{
+    "name": "Pacs Dev Container from docker HUB",
+    "image": "lucaformaggia/pacs-examples:latest",
+    "context": ".",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-vscode.cpptools",
+                "eamodio.gitlens",
+                "xaver.clang-format"
+            ]
+        }
+    },
+    "mounts": [
+        "source=./shared_files,target=/home/pacs/pacs-examples/shared_files,type=bind"
+    ],
+    "remoteUser": "pacs",
+    "workspaceFolder": "/home/pacs/pacs-examples"
+}
