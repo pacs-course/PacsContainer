@@ -2,6 +2,10 @@
 # Use the official ubuntu image for amd64
 FROM --platform=linux/amd64 ubuntu:24.04
 
+# If you do not want to reganarate everithing you have to change this number
+# It does not work, unfortunately. So if you change the value all is
+# a real pity.
+ARG CACHEBURST=2
 # Set the user root
 USER root
 # prevent interactive prompts
@@ -26,7 +30,7 @@ RUN apt-get install -y \
     libhdf5-serial-dev libhdf5-mpich-dev \
     libblas-dev libopenblas-dev \
     liblapack-dev liblapacke-dev \
-    sudo
+    sudo vim gedit
 
 #clean up
 RUN apt-get clean && \
@@ -59,15 +63,16 @@ RUN ssh-keyscan github.com >> ${USER_HOME}/.ssh/known_hosts
 # Add the SSH key to the ssh-agent
 RUN eval "$(ssh-agent -s)" && ssh-add ${USER_HOME}/.ssh/id_rsa
 
-# download pacs-examples using https
-RUN cd ${USER_HOME} && git clone https://github.com/pacs-course/pacs-examples.git ./pacs-examples
+# download pacs-examples using https. cleanup previous installations
+RUN echo $CASHBURST at `date` >${USER_HOME}/build_date.txt && cd ${USER_HOME} && rm -r -f ./pacs-examples && git clone https://github.com/pacs-course/pacs-examples.git ./pacs-examples
 # This cannot work in the container because the container ssh key is not added to the github account
 # If you add the ssh key to the github account you can change the protocol to ssh with the following command
 # git remote git@github.com:pacs-course/pacs-examples.git origin
-#RUN git clone --recursive git@github.com:pacs-course/pacs-examples.git
+# This command is executed any time, ignoring cache
+#RUN echo $CASHBURST at `date` >${USER_HOME}/build_date.txt && git clone --recursive git@github.com:pacs-course/pacs-examples.git
 # I need not to chenge protocol also to submodules and compile them
-RUN cd ${USER_HOME}/pacs-examples && ./change_submodules_url_https.sh
-RUN cd ${USER_HOME}/pacs-examples && ./install-git-submodules.sh
+RUN echo $CASHBURST at `date` >${USER_HOME}/build_date.txt && cd ${USER_HOME}/pacs-examples && ./change_submodules_url_https.sh
+RUN echo $CASHBURST at `date` >${USER_HOME}/build_date.txt && cd ${USER_HOME}/pacs-examples && ./install-git-submodules.sh
 
 # Set the pacs-root environment variable
 ENV PACS_ROOT=${USER_HOME}/pacs-examples/Examples
@@ -94,13 +99,13 @@ ENTRYPOINT ["/bin/bash"]
 CMD ["-l"]
 
 # Set the main Makefile
-RUN cd ${PACS_ROOT} && cp Makefile.container Makefile.inc
+RUN echo $CASHBURST at `date` >${USER_HOME}/build_date.txt && cd ${PACS_ROOT} && cp Makefile.container Makefile.inc
 # Build the required libraries and install required header files
-RUN cd ${PACS_ROOT}/src/Utilities && make && make install
-RUN cd ${PACS_ROOT}/src/LinearAlgebraUtil && make && make install
+RUN echo $CASHBURST at `date` >${USER_HOME}/build_date.txt && cd ${PACS_ROOT}/src/Utilities && make && make install
+RUN echo $CASHBURST at `date` >${USER_HOME}/build_date.txt && cd ${PACS_ROOT}/src/LinearAlgebraUtil && make && make install
 
 # Install the laboratory sessions
-RUN cd ${USER_HOME} && git clone https://github.com/pacs-course/pacs-Labs.git ./pacs-Labs
+RUN echo $CASHBURST at `date` >${USER_HOME}/build_date.txt && cd ${USER_HOME} && rm -r -f ./pacs-Labs && git clone https://github.com/pacs-course/pacs-Labs.git ./pacs-Labs
 
 # Build the image
 # docker build -t pacs-examples -f Dockerfile .
