@@ -19,5 +19,5 @@
         "source=./shared_files,target=/home/pacs/pacs-examples/shared_files,type=bind"
     ],
     "remoteUser": "pacs",
-    "workspaceFolder": "/home/pacs/pacs-examples"
+    "workspaceFolder": "/home/pacs"
 }
