@@ -18,17 +18,16 @@ You should install the `Dev Container` extension in Visual Studio Code. You can 
 
 Once you have the extension installed, you just open the `vsCode-precmpiled`  (or the `vsCode`, if you prefer) folder in Visual Studio Code and you will see a notification in the lower right corner of the window. Click on the notification and select the option `Reopen in Container`. The first time you do it, the container will be fetched from the docker hub (or built if you go in `vsCode` folder). If you build the container, the construction may take time, be patient.
 
+# Shared files. 
+If you want to share files between the host and the container, you can use the `shared_files` folder. This folder is in the home directory in the docker image. The `shared_files` folder is shared between the host and the container.  If you have launched visual code from the `vsCode**` folders the `shared_files` folder is autoomatically mounted in the local `shared_file` subfolder. If yoou want a different binding, change the `devcontainer.json` file in the `.devcontainer` folder.
+If you are using docker independently from Visual Studio Code, you can use the following command to bind the `shared_files` folder to the container:
+
+```bash
+docker run -it --rm -v <host directory>:/home/pacs/shared_files pacs-container
+```
 
 ## Some notes
 
-1. The Virtual Studio Code setup is such that the container and the host share the `shared_files` folder.
-So, that folder can be used to share files between the host and the container. The `shared_files` folder is in the root of the repository.
-2. If you wish to obtain the same result if you build the container yourserf using the Dockerfile in `Docker/` or you use the precompiled one directly from the Docker Hub, you must run the container with the following command from the directory where the `shared_files` folder is located:
+If you use a dev container in Visual Studio Code, you can pull frequently from the repositories `pacs-examples` and `pacs-Labs` to keep the material updated, following the instruction in the README.md file of the repositories.
 
-```bash
-docker run -it --rm -v $(pwd)/shared_files:/home/pacs/shared_files pacs-course/pacs-container
-```
-
-3.If you use a dev contained in Visual Studio Code, you can pull frequently from the repositories `pacs-examples` and `pacs-Labs` to keep the material updated, following the instruction in the README.md file of the repositories.
-
-4.The repositories `pacs-examples` and `pacs-Labs` are cloned in the container using the https protocol. If you want to switch to the more convenient `ssh` protocol, you can do it by following the instructions in the main README.md file of the repositories. This applies also for the submodules of the `pacs-examples` repository.
+The repositories `pacs-examples` and `pacs-Labs` are cloned in the container using the https protocol. If you want to switch to the more convenient `ssh` protocol, you can do it by following the instructions in the main README.md file of the repositories. This applies also for the submodules of the `pacs-examples` repository.

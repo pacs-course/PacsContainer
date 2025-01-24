@@ -16,7 +16,7 @@
         }
     },
     "mounts": [
-        "source=./shared_files,target=/home/pacs/pacs-examples/shared_files,type=bind"
+        "source=./shared_files,target=/home/pacs/shared_files,type=bind"
     ],
     "remoteUser": "pacs",
     "workspaceFolder": "/home/pacs"

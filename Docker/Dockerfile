@@ -107,12 +107,16 @@ RUN echo "$CACHEBUST at `date`" >${USER_HOME}/build_date.txt && cd ${PACS_ROOT}/
 # Install the laboratory sessions
 RUN echo "$CACHEBUST at `date`" >${USER_HOME}/build_date.txt && cd ${USER_HOME} && rm -r -f ./pacs-Labs && git clone https://github.com/pacs-course/pacs-Labs.git ./pacs-Labs
 
+# create a shared directory
+RUN mkdir -p ${USER_HOME}/shared_files && chmod 777 ${USER_HOME}/shared_files
+
 # Build the image
 # docker build -t pacs-examples -f Dockerfile .
 # or
 # docker buildx build --platform linux/amd64 -t pacs-examples -f Dockerfile .
 # push the image
-# docker tag pacs-examples lucaformaggia/pacs-example:<tag> (tag is usualy latest
+# docker tag pacs-examples <username>/<imagename>:<tag> (tag is usualy latest
+# docker login <username>
 # docker push <username>/<imagename>:<tag>
 # Run the container
 # docker run -it --rm pacs-examples
